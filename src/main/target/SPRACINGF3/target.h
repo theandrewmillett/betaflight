@@ -44,21 +44,21 @@
 //#undef USE_MSP_DISPLAYPORT
 //#undef USE_MSP_OVER_TELEMETRY
 
-#undef USE_LED_STRIP
+//#undef USE_LED_STRIP                  // keeping for performance edition
 //#undef USE_HUFFMAN
 //#undef USE_PINIO
 //#undef USE_PINIOBOX
 
-//#undef USE_TELEMETRY_HOTT
-//#undef USE_TELEMETRY_MAVLINK
-//#undef USE_TELEMETRY_LTM
+#undef USE_TELEMETRY_HOTT
+#undef USE_TELEMETRY_MAVLINK
+#undef USE_TELEMETRY_LTM
 #undef USE_SERIALRX_XBUS
 #undef USE_SERIALRX_SUMH
 #undef USE_PWM
 
 #endif
 
-#undef USE_THRUST_LINEARIZATION
+//#undef USE_THRUST_LINEARIZATION       // keeping for performance edition
 #undef USE_BOARD_INFO
 #undef USE_RTC_TIME
 

@@ -153,11 +153,11 @@
 #endif
 
 #if (FLASH_SIZE > 64)
-#define USE_ACRO_TRAINER
+//#define USE_ACRO_TRAINER      // removed for performance edition
 #define USE_BLACKBOX
 #define USE_RESOURCE_MGMT
 #define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
-#define USE_SERVOS
+//#define USE_SERVOS            // removed for performance edition
 #define USE_TELEMETRY
 #define USE_TELEMETRY_FRSKY_HUB
 #define USE_TELEMETRY_HOTT
@@ -176,8 +176,8 @@
 #define USE_LAUNCH_CONTROL
 #define USE_MSP_DISPLAYPORT
 #define USE_MSP_OVER_TELEMETRY
-#define USE_PINIO
-#define USE_PINIOBOX
+//#define USE_PINIO             // removed for performance edition
+//#define USE_PINIOBOX          // removed for performance edition
 #define USE_RCDEVICE
 #define USE_RTC_TIME
 #define USE_RX_MSP
@@ -214,6 +214,16 @@
 #define USE_SPEKTRUM_CMS_TELEMETRY
 #endif
 #define USE_SERIAL_4WAY_BLHELI_BOOTLOADER
+
+// moved from the > 256 section to the > 128 section -- performance edition ----
+#define USE_OSD
+#define USE_OSD_OVER_MSP_DISPLAYPORT
+#define USE_OSD_ADJUSTMENTS
+#define USE_OSD_PROFILES
+#define USE_OSD_STICK_OVERLAY
+#define USE_ABSOLUTE_CONTROL
+#define USE_GYRO_DLPF_EXPERIMENTAL
+// -----------------------------------------------------------------------------
 #endif
 
 #if (FLASH_SIZE > 256)
@@ -222,11 +232,7 @@
 #define USE_GPS_NMEA
 #define USE_GPS_UBLOX
 #define USE_GPS_RESCUE
-#define USE_GYRO_DLPF_EXPERIMENTAL
-#define USE_OSD
-#define USE_OSD_OVER_MSP_DISPLAYPORT
 #define USE_MULTI_GYRO
-#define USE_OSD_ADJUSTMENTS
 #define USE_SENSOR_NAMES
 #define USE_SERIALRX_JETIEXBUS
 #define USE_TELEMETRY_IBUS
@@ -235,15 +241,11 @@
 #define USE_TELEMETRY_MAVLINK
 #define USE_UNCOMMON_MIXERS
 #define USE_SIGNATURE
-#define USE_ABSOLUTE_CONTROL
 #define USE_HOTT_TEXTMODE
 #define USE_LED_STRIP
 #define USE_VARIO
 #define USE_RX_LINK_QUALITY_INFO
 #define USE_ESC_SENSOR_TELEMETRY
-#define USE_OSD_PROFILES
-#define USE_OSD_STICK_OVERLAY
 #define USE_ESCSERIAL_SIMONK
 #define USE_SERIAL_4WAY_SK_BOOTLOADER
 #endif
-

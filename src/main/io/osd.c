@@ -700,7 +700,26 @@ static bool osdDrawSingleElement(uint8_t item)
         break;
 
     case OSD_ALTITUDE:
-        osdFormatAltitudeString(buff, getEstimatedAltitudeCm());
+        {
+            bool haveBaro = false;
+            bool haveGps = false;
+#ifdef USE_BARO
+            haveBaro = sensors(SENSOR_BARO);
+#endif
+#ifdef USE_GPS
+            haveGps = sensors(SENSOR_GPS) && STATE(GPS_FIX);
+#endif
+            if (haveBaro || haveGps) {
+                osdFormatAltitudeString(buff, getEstimatedAltitudeCm());
+            } else {
+                // We use this symbol when we don't have a valid measure
+                buff[0] = SYM_COLON;
+                // overwrite any previous altitude with blanks
+                memset(buff + 1, SYM_BLANK, 6);
+                buff[7] = '\0';
+            }
+        }
+
         break;
 
     case OSD_ITEM_TIMER_1:
@@ -806,10 +825,10 @@ static bool osdDrawSingleElement(uint8_t item)
 #if defined(USE_VTX_COMMON)
     case OSD_VTX_CHANNEL:
         {
-            const char vtxBandLetter = vtx58BandLetter[vtxSettingsConfig()->band];
-            const char *vtxChannelName = vtx58ChannelNames[vtxSettingsConfig()->channel];
-            uint8_t vtxPower = vtxSettingsConfig()->power;
             const vtxDevice_t *vtxDevice = vtxCommonDevice();
+            const char vtxBandLetter = vtxCommonLookupBandLetter(vtxDevice, vtxSettingsConfig()->band);
+            const char *vtxChannelName = vtxCommonLookupChannelName(vtxDevice, vtxSettingsConfig()->channel);
+            uint8_t vtxPower = vtxSettingsConfig()->power;
             if (vtxDevice && vtxSettingsConfig()->lowPowerDisarm) {
                 vtxCommonGetPowerIndex(vtxDevice, &vtxPower);
             }
@@ -996,7 +1015,7 @@ static bool osdDrawSingleElement(uint8_t item)
             if (osdWarnGetState(OSD_WARNING_GPS_RESCUE_UNAVAILABLE) &&
                ARMING_FLAG(ARMED) &&
                gpsRescueIsConfigured() &&
-               !isGPSRescueAvailable()) {
+               !gpsRescueIsAvailable()) {
                 osdFormatMessage(buff, OSD_FORMAT_MESSAGE_BUFFER_SIZE, "NO GPS RESC");
                 SET_BLINK(OSD_WARNINGS);
                 break;
@@ -1169,9 +1188,25 @@ static bool osdDrawSingleElement(uint8_t item)
 #ifdef USE_VARIO
     case OSD_NUMERICAL_VARIO:
         {
-            const int verticalSpeed = osdGetMetersToSelectedUnit(getEstimatedVario());
-            const char directionSymbol = verticalSpeed < 0 ? SYM_ARROW_SOUTH : SYM_ARROW_NORTH;
-            tfp_sprintf(buff, "%c%01d.%01d", directionSymbol, abs(verticalSpeed / 100), abs((verticalSpeed % 100) / 10));
+            bool haveBaro = false;
+            bool haveGps = false;
+#ifdef USE_BARO
+            haveBaro = sensors(SENSOR_BARO);
+#endif
+#ifdef USE_GPS
+            haveGps = sensors(SENSOR_GPS) && STATE(GPS_FIX);
+#endif
+            if (haveBaro || haveGps) {
+                const int verticalSpeed = osdGetMetersToSelectedUnit(getEstimatedVario());
+                const char directionSymbol = verticalSpeed < 0 ? SYM_ARROW_SOUTH : SYM_ARROW_NORTH;
+                tfp_sprintf(buff, "%c%01d.%01d", directionSymbol, abs(verticalSpeed / 100), abs((verticalSpeed % 100) / 10));
+            } else {
+                // We use this symbol when we don't have a valid measure
+                buff[0] = SYM_COLON;
+                // overwrite any previous vertical speed with blanks
+                memset(buff + 1, SYM_BLANK, 6);
+                buff[7] = '\0';
+            }
             break;
         }
 #endif
